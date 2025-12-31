@@ -187,14 +187,15 @@ class Config:
         self._validate_setting(setting)
         return self.flags[setting]["schema"]
 
-
-def parse_data_to_accounts(config: Config) -> list[dict[str, str]]:
+def load_file_lines(config: Config) -> list[str]:
     input_file = Path(config.get(Flags.INPUT_FILE))
     if not input_file.exists():
         error_msg = f"Arquivo de input especificado '{input_file.name}' não encontrado."
         raise ValueError(error_msg)
     input_lines = [line.strip() for line in input_file.open("r", encoding=config.get(Flags.READ_ENCODING)).readlines()]
+    return input_lines
 
+def parse_data_to_accounts(config: Config, input_lines: list[str]) -> list[dict[str, str]]:
     accounts_settings = []
     columns = config.get(Flags.COLUMNS).split(" ")
     label_pattern = config.get(Flags.LABEL_PATTERN)
@@ -264,8 +265,9 @@ if __name__ == "__main__":
     if config.get(Flags.HELP):
         print(config.generate_flags_man())
         sys.exit(0)
-    
-    accounts = parse_data_to_accounts(config)
+
+    input_lines = load_file_lines(config)
+    accounts = parse_data_to_accounts(config, input_lines)
     output_file = Path(config.get(Flags.OUTPUT_FILE))
     content = build_content(config, accounts)
     output_file.write_text(content, encoding=config.get(Flags.WRITE_ENCODING))
