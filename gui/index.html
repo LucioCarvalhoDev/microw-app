@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MicroW - Gerador de Contas MicroSIP</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    
+    
+    <section class="settings">
+
+        <h2>Configurações</h2>
+
+        <form class="settings_form" action="">
+            <label for="file">Arquivo CSV</label>
+            <input type="file" id="" name="file" accept=".txt,.csv,.ini" value="sip.example.com"><br><br>
+
+            <label for="server">Servidor SIP:</label>
+            <input type="text" id="server" name="server" value="sip.example.com"><br><br>
+
+            <label for="domain">Domínio:</label>
+            <input type="text" id="domain" name="domain" value="example.com"><br><br>
+        </form>
+
+        <button onclick="document.querySelector('tbody').innerHTML +='<tr><td>1</td><td>Servidor VoIP A</td><td>Online</td></tr>'">INSERIR ITEM</button>
+    </section>
+
+    <section class="data">
+
+        <h2>Dados</h2>
+
+        <div class="data_area">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+
+        </div>
+        <div class="data_area_controls">
+            <button id="load_data_btn">Carregar Dados</button>
+            <button id="clear_data_btn">Limpar Dados</button>
+        </div>
+    </section>
+
+
+    <script type="module" src="./js/script.js"></script>
+
+</body>
+
+</html>
