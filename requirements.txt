@@ -1,0 +1,3 @@
+pywebview
+pyinstaller
+pip install pywebview[qt]

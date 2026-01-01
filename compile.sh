@@ -1,0 +1,1 @@
+pyinstaller --onefile --windowed --add-data ./gui:gui main.py
