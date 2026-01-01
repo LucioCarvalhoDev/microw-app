@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MicroW - Gerador de Contas MicroSIP</title>
-    <link rel="stylesheet" href="reset.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
@@ -18,17 +18,43 @@
         <h2>Configurações</h2>
 
         <form class="settings_form" action="">
-            <label for="file">Arquivo CSV</label>
-            <input type="file" id="" name="file" accept=".txt,.csv,.ini" value="sip.example.com"><br><br>
+            <div class="settings_form_field">
+                <!-- <label for="file">Arquivo CSV</label>
+                <input type="file" id="" name="file" accept=".txt,.csv,.ini" value="sip.example.com"><br><br> -->
+                <label for="server">Servidor</label>
+                <input type="url" id="server" name="server" placeholder="sip.example.com">
+            </div>
 
-            <label for="server">Servidor SIP:</label>
-            <input type="text" id="server" name="server" value="sip.example.com"><br><br>
+            <div class="settings_form_field">
+                <label for="password">Senha</label>
+                <input type="text" id="password" name="password" placeholder="senha_sip">
+            </div>
 
-            <label for="domain">Domínio:</label>
-            <input type="text" id="domain" name="domain" value="example.com"><br><br>
+            <div class="settings_form_field">
+                <label for="label">Label</label>
+                <input type="text" id="label" name="label" placeholder="{ramal} - {nome}">
+            </div>
+
+            <div class="settings_form_field">
+                <label for="sort">Sortear</label>
+                <select
+                    name="sort"
+                    id="sort">
+                    <option value="none"></option> 
+                    <option value="nome">Nome</option>
+                    <option value="ramal">Ramal</option>
+                </select>
+            </div>
+
+            <div class="settings_form_field--button">
+                <label for="ghost">Ghost</label>
+                <input type="checkbox" id="ghost" name="ghost">
+                <span class="checked"></span>
+            </div>
+
         </form>
 
-        <button onclick="document.querySelector('tbody').innerHTML +='<tr><td>1</td><td>Servidor VoIP A</td><td>Online</td></tr>'">INSERIR ITEM</button>
+        <button id="test-btn">INSERIR ITEM</button>
     </section>
 
     <section class="data">
@@ -51,10 +77,12 @@
 
         </div>
         <div class="data_area_controls">
-            <button id="load_data_btn">Carregar Dados</button>
+            <button id="load-data-btn">Carregar Dados</button>
             <button id="clear_data_btn">Limpar Dados</button>
         </div>
     </section>
+
+    <section class="preview"></section>
 
 
     <script type="module" src="./js/script.js"></script>

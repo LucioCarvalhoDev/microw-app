@@ -7,23 +7,21 @@ class Api:
     def log(self, text):
         print(text)
     
-    def load_exemple_data(self):
+    def parse_csv_to_accounts(self, text: str):
         config = microw.Config()
         config.set(microw.Flags.DELIMITER, ",")
-        config.set(microw.Flags.INPUT_FILE, "./example.csv")
 
-        file_lines = microw.load_file_lines(config)
+        file_lines = text.splitlines()
+        
         buff = file_lines[0].split(config.get(microw.Flags.DELIMITER))
         columns = len(buff)
-        print(f"Detected {columns} columns.\n{buff}")
         columns_names = ""
         for i in range(columns):
             columns_names += f"col{i} "
         columns_names = columns_names.strip()
         config.set(microw.Flags.COLUMNS, columns_names)
-
-        accounts = microw.parse_data_to_accounts(config, file_lines)
-        return accounts
+        return microw.parse_data_to_accounts(config, file_lines)
+        
 
 
 def main(app):
