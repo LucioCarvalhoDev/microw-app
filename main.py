@@ -1,6 +1,4 @@
 import webview
-import os
-from pathlib import Path
 import microw
 
 class Api:
@@ -38,7 +36,8 @@ class Api:
 
 
 def main(app):
-    webview.start(debug=True)
+    
+    webview.start(debug=True, gui='edge') # type: ignore
     webview.settings['OPEN_DEVTOOLS_IN_DEBUG'] = False
     app.destroy()
 

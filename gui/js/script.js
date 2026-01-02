@@ -8,6 +8,7 @@ class Controller {
     constructor(view) {
         this.view = view
         this.data = []
+        this.content = ""
         this.pyready = false
         this.fileSelector = null
 
@@ -18,15 +19,15 @@ class Controller {
         this.fileSelector.addEventListener('change', async (event) => {
             if (this.fileSelector.files.length > 0) {
                 let fileContent = await this.fileSelector.files[0].text();
-                this.data = await window.pywebview.api.parse_csv_to_accounts(fileContent)
-                this.updateView()
-                this.updatePreview()
+                var accounts = await window.pywebview.api.parse_csv_to_accounts(fileContent)
+                this.data = accounts
+                this.update()
             }
         })
         
         document.getElementById("test-btn").onclick = () => {
             this.data.push({id: this.data.length + 1, nome: "Teste", status: "Online"})
-            this.updateView()
+            this.update()
         }
         
         document.getElementById("load-data-btn").onclick = () => {
@@ -35,14 +36,27 @@ class Controller {
 
         document.getElementById("clear_data_btn").onclick = () => {
             this.data = []
-            this.updateView()
+            this.update()
+        }
+
+        document.getElementById("download").onclick = () => {
+            let link = document.createElement('a');
+            let blob = new Blob([this.content], { type: 'text/plain' });
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'accounts.txt';
+            link.click();
         }
 
         window.controller = this
     }
 
-    updateView() {
-        console.log(`updateView com ${this.data.length} itens`)
+    async update() {
+        this.updateTable()
+        await this.updateContent()
+        this.updatePreview()
+    }
+
+    updateTable() {
         if (this.data.length == 0) {
             this.empty_view()
             return
@@ -52,7 +66,6 @@ class Controller {
 
         tbody.innerHTML = ""
 
-
         for (let account of this.data) {
             let row = ""
             for (let key in account) {
@@ -60,13 +73,11 @@ class Controller {
             }
             tbody.innerHTML += row
         }
-        let columns = Object.keys(this.data[0])
+
         this.view.querySelector("thead tr").innerHTML = ""
         for (let key in this.data[0]) {
             this.view.querySelector("thead tr").innerHTML += `<th>${key}</th>`
         }
-
-        this.updatePreview()
     }
 
     empty_view() {
@@ -75,18 +86,22 @@ class Controller {
         this.view.querySelector("thead tr").innerHTML = "<th></th>";
     }
 
+    async updateContent() {
+        let content = await window.pywebview.api.build_content(this.data);
+        this.content = content
+    }
+
     updatePreview() {
-        window.pywebview.api.build_content(this.data).then((content) => {
-            let code_area = document.getElementById("preview_content")
-            code_area.textContent = content;
-            code_area.className = 'language-ini';
-            delete code_area.dataset.highlighted;
-            hljs.highlightElement(code_area);
-        })
+        let code_area = document.getElementById("preview_content")
+        code_area.textContent = this.content;
+        code_area.className = 'language-ini';
+        delete code_area.dataset.highlighted;
+        hljs.highlightElement(code_area);
     }
 
 }
 
 let controller = new Controller(document.querySelector("table"))
 controller.empty_view()
-controller.updateView()
+controller.updateTable()
+controller.updatePreview()
