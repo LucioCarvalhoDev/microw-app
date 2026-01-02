@@ -14,7 +14,7 @@ body, input, h1, h2, h3, h4, h5, h6, button, select, textarea {
 
 body {
     display: grid;
-    grid-template-columns: 2fr 3fr 2fr;
+    grid-template-columns: auto 3fr 2fr;
     grid-template-rows: 1fr;
     width: 100vw;
     height: 100vh;
@@ -119,7 +119,7 @@ table th:not(:last-child) {
     display: grid;
     grid-template-rows: 1.75rem 1fr 1.75rem;
     box-sizing: border-box;
-    gap: .5rem
+    gap: .5rem;
 }
 
 .settings_form_field, .settings_form_field--button {
@@ -179,3 +179,21 @@ table th:not(:last-child) {
 .settings_form_field input:focus, .settings_form_field--button input:focus {
     outline: none;
 }
+
+.preview {
+    display: grid;
+    grid-template-rows: 1.75rem 1fr 2rem;
+    max-height: 100%;
+    box-sizing: border-box;
+    gap: .5rem
+}
+
+
+.preview_content {
+    font-family: Consolas,"courier new";
+    color: crimson;
+    background-color: #f1f1f1;
+    padding: 2px;
+    font-size: 105%;
+}
+

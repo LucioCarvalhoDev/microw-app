@@ -7,6 +7,9 @@
     <title>MicroW - Gerador de Contas MicroSIP</title>
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/style.css">
+    <!-- <link rel="stylesheet" href="./lib/highlight/styles/tokyo-night-dark.css"> -->
+    <link rel="stylesheet" href="./lib/highlight/styles/tokyo-night-dark.css">
+
 </head>
 
 <body>
@@ -17,7 +20,7 @@
 
         <h2>Configurações</h2>
 
-        <form class="settings_form" action="">
+        <form id="settings-form" class="settings_form" action="">
             <div class="settings_form_field">
                 <!-- <label for="file">Arquivo CSV</label>
                 <input type="file" id="" name="file" accept=".txt,.csv,.ini" value="sip.example.com"><br><br> -->
@@ -82,7 +85,19 @@
         </div>
     </section>
 
-    <section class="preview"></section>
+    <section class="preview">
+
+        <h2>Preview</h2>
+
+        <div class="preview_area">
+            <pre><code id="preview_content"></code></pre>
+        </div>
+
+        <div class="preview_controls">
+            <button id="regen">Gerar Preview</button>
+            <button id="download">Baixar Arquivo</button>
+        </div>
+    </section>
 
 
     <script type="module" src="./js/script.js"></script>

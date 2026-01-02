@@ -1,3 +1,9 @@
+
+import hljs from '../lib/highlight/es/highlight.js';
+import hljsGrammar from '../lib/highlight/es/languages/ini.js'
+
+hljs.registerLanguage('ini', hljsGrammar);
+
 class Controller {
     constructor(view) {
         this.view = view
@@ -14,9 +20,9 @@ class Controller {
                 let fileContent = await this.fileSelector.files[0].text();
                 this.data = await window.pywebview.api.parse_csv_to_accounts(fileContent)
                 this.updateView()
+                this.updatePreview()
             }
         })
-
         
         document.getElementById("test-btn").onclick = () => {
             this.data.push({id: this.data.length + 1, nome: "Teste", status: "Online"})
@@ -59,12 +65,24 @@ class Controller {
         for (let key in this.data[0]) {
             this.view.querySelector("thead tr").innerHTML += `<th>${key}</th>`
         }
+
+        this.updatePreview()
     }
 
     empty_view() {
         let tbody = this.view.querySelector("tbody")
         tbody.innerHTML = "<tr></tr>";
         this.view.querySelector("thead tr").innerHTML = "<th></th>";
+    }
+
+    updatePreview() {
+        window.pywebview.api.build_content(this.data).then((content) => {
+            let code_area = document.getElementById("preview_content")
+            code_area.textContent = content;
+            code_area.className = 'language-ini';
+            delete code_area.dataset.highlighted;
+            hljs.highlightElement(code_area);
+        })
     }
 
 }
