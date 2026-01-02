@@ -96,7 +96,7 @@ class FlagSchema(Enum):
 class Config:
     def __init__(self):
         self.flags = {}
-        self.define_flag(flag=Flags.COLUMNS, schema=FlagSchema.Argument, default="ramal label", man="""Define a ordem das colunas no arquivo de entrada. Use nomes de variáveis (ex: ramal, password) ou '_' para ignorar uma coluna específica.""")
+        self.define_flag(flag=Flags.COLUMNS, schema=FlagSchema.Argument, default=None, man="""Define a ordem das colunas no arquivo de entrada. Use nomes de variáveis (ex: ramal, password) ou '_' para ignorar uma coluna específica.""")
         self.define_flag(flag=Flags.SET_PASSWORD, schema=FlagSchema.Argument, default=None, man="Quando presente determina uma única senha para ser usada por todas as contas.")
         self.define_flag(flag=Flags.SET_SERVER, schema=FlagSchema.Argument, default=None, man="Quando presente determina o servidor de todas as contas.")
         self.define_flag(flag=Flags.DELIMITER, schema=FlagSchema.Argument, default=",", man="""Define qual string será considerada como seprador das colunas de cada linha do input.""")
@@ -197,7 +197,18 @@ def load_file_lines(config: Config) -> list[str]:
 
 def parse_data_to_accounts(config: Config, input_lines: list[str]) -> list[dict[str, str]]:
     accounts_settings = []
-    columns = config.get(Flags.COLUMNS).split(" ")
+
+    columns = config.get(Flags.COLUMNS)
+    if columns is None:
+        buff = input_lines[0].split(config.get(Flags.DELIMITER))
+        print("gerando", buff)
+        columns = ""
+        for i in range(len(buff)):
+            columns += f"col{i} "
+        columns = columns.strip()
+    
+    columns = columns.split(" ")
+
     label_pattern = config.get(Flags.LABEL_PATTERN)
 
     for line in input_lines:
