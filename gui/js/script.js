@@ -20,6 +20,9 @@ class Controller {
             if (this.fileSelector.files.length > 0) {
                 let fileContent = await this.fileSelector.files[0].text();
                 var accounts = await window.pywebview.api.parse_csv_to_accounts(fileContent)
+                for (let account of accounts) {
+                    delete account.label
+                }
                 this.data = accounts
                 this.update()
             }
@@ -54,6 +57,23 @@ class Controller {
         this.updateTable()
         await this.updateContent()
         this.updatePreview()
+        this.updateForm()
+    }
+
+    updateForm() {
+        document.getElementById("sort-by").innerHTML = `<option value="none"></option>` + this.getColumns().map(colName => `<option value="${colName}">${colName}</option>`).join("\n")
+    }
+
+    getColumns() {
+        let columns = []
+
+        if (this.data.length == 0) return columns;
+
+        for (let key of Object.keys(this.data[0])) {
+            columns.push(key)
+        }
+
+        return columns
     }
 
     updateTable() {
@@ -78,6 +98,8 @@ class Controller {
         for (let key in this.data[0]) {
             this.view.querySelector("thead tr").innerHTML += `<th>${key}</th>`
         }
+
+        this.getColumns()
     }
 
     empty_view() {

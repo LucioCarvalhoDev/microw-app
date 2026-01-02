@@ -176,8 +176,16 @@ table th:not(:last-child) {
     color: var(--text-color);
 }
 
+.settings_form_field select option {
+    background: #8589ac65;
+}
+
 
 .settings_form_field input:focus, .settings_form_field--button input:focus {
+    outline: none;
+}
+
+.settings_form_field select:focus, .settings_form_field select:focus-visible {
     outline: none;
 }
 
