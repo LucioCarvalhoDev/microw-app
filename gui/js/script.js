@@ -11,6 +11,8 @@ class Controller {
         this.content = ""
         this.pyready = false
         this.fileSelector = null
+        this.settings = {}
+        this.maskNames = ["ramal", "password", "server", "label"]
 
         this.fileSelector = document.createElement('input');
         this.fileSelector.type = 'file';
@@ -23,16 +25,17 @@ class Controller {
                 for (let account of accounts) {
                     delete account.label
                 }
-                this.data = accounts
+
+                this.setData(accounts)
                 this.update()
             }
         })
-        
+
         document.getElementById("test-btn").onclick = () => {
-            this.data.push({id: this.data.length + 1, nome: "Teste", status: "Online"})
+            this.data.push({ id: this.data.length + 1, nome: "Teste", status: "Online" })
             this.update()
         }
-        
+
         document.getElementById("load-data-btn").onclick = () => {
             this.fileSelector.click();
         }
@@ -50,14 +53,61 @@ class Controller {
             link.click();
         }
 
+        document.getElementById("form-settings").onchange = () => {
+            let settings = Object.fromEntries(new FormData(document.getElementById("form-settings")));
+            for (let checkboxElement of document.querySelectorAll("#form-settings input[type='checkbox'")) {
+                settings[checkboxElement.name] = checkboxElement == "on"
+            }
+            this.settings = settings
+            this.updateContent()
+        }
+
+        document.querySelector("thead").onchange = () => {
+            console.log("mudança no thead")
+            this.updateContent()
+        }
+
+        document.getElementById("reload").onclick = () => {
+            this.updateContent()
+        }
+
         window.controller = this
+    }
+
+    async setData(data) {
+        this.data = data
+        await this.updateContent()
+        await this.updateTable()
     }
 
     async update() {
         this.updateTable()
         await this.updateContent()
         this.updatePreview()
-        this.updateForm()
+    }
+
+    getMaskedData() {
+        let masks = {};
+        const selectElementList = this.view.querySelectorAll("thead select");
+        for (const select of selectElementList) {
+            const columName = select.value
+
+            if (!this.maskNames.includes(columName)) continue;
+
+            masks[select.dataset.id] = columName
+        }
+
+        const maskedData = this.data.map(accountData => {
+            const maskedAccount = {}
+            for (let [key, value] of Object.entries(accountData)) {
+                const mask = masks[key]
+                if (mask != undefined) key = mask
+                maskedAccount[key] = value
+            }
+            return maskedAccount
+        })
+
+        return maskedData
     }
 
     updateForm() {
@@ -76,16 +126,26 @@ class Controller {
         return columns
     }
 
+    getNamedColumns() {
+
+    }
+
     updateTable() {
         if (this.data.length == 0) {
             this.empty_view()
             return
         }
 
+        const tableHeader = this.view.querySelector("thead tr");
+        tableHeader.innerHTML = ""
+        for (let key in this.data[0]) {
+            // console.log(key)
+            let col = key
+            tableHeader.innerHTML += `<th><select data-id="${col}"><option value="${col}">${col}</option>${this.maskNames.map(name => `<option value="${name}">${name}</option>`)}</select></th>`
+        }
+
         let tbody = this.view.querySelector("tbody")
-
         tbody.innerHTML = ""
-
         for (let account of this.data) {
             let row = ""
             for (let key in account) {
@@ -93,13 +153,6 @@ class Controller {
             }
             tbody.innerHTML += row
         }
-
-        this.view.querySelector("thead tr").innerHTML = ""
-        for (let key in this.data[0]) {
-            this.view.querySelector("thead tr").innerHTML += `<th>${key}</th>`
-        }
-
-        this.getColumns()
     }
 
     empty_view() {
@@ -109,7 +162,11 @@ class Controller {
     }
 
     async updateContent() {
-        let content = await window.pywebview.api.build_content(this.data);
+        const data = this.getMaskedData()
+        console.log("update content", data)
+
+        let content = await window.pywebview.api.build_content(data, this.settings);
+        console.log("resultado: ", content)
         this.content = content
     }
 

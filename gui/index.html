@@ -20,22 +20,21 @@
 
         <h2>Configurações</h2>
 
-        <form id="settings-form" class="settings_form" action="">
+        <form id="form-settings" class="settings_form" action="">
             <div class="settings_form_field">
-                <!-- <label for="file">Arquivo CSV</label>
-                <input type="file" id="" name="file" accept=".txt,.csv,.ini" value="sip.example.com"><br><br> -->
-                <label for="server">Servidor</label>
-                <input type="url" id="server" name="server" placeholder="sip.example.com">
+
+                <label for="set-server">Servidor Padrão</label>
+                <input type="url" id="set-server" name="set-server" placeholder="sip.example.com">
             </div>
 
             <div class="settings_form_field">
-                <label for="password">Senha</label>
-                <input type="text" id="password" name="password" placeholder="senha_sip">
+                <label for="set-password">Senha Padrão</label>
+                <input type="text" id="set-password" name="set-password" placeholder="senha_sip">
             </div>
 
             <div class="settings_form_field">
-                <label for="label">Label</label>
-                <input type="text" id="label" name="label" placeholder="{col1} - {col2}">
+                <label for="label-pattern">Label</label>
+                <input type="text" id="label-pattern" name="label-pattern" placeholder="{col1} - {col2}">
             </div>
 
             <div class="settings_form_field">
@@ -43,19 +42,21 @@
                 <select
                     name="sort-by"
                     id="sort-by">
-                    <option value="none"></option> 
+                    <option value=""></option> 
                 </select>
             </div>
 
             <div class="settings_form_field--button">
-                <label for="ghost">Ghost</label>
-                <input type="checkbox" id="ghost" name="ghost">
+                <label for="add-ghost">Ghost</label>
+                <input type="checkbox" id="add-ghost" name="add-ghost">
                 <span class="checked"></span>
             </div>
 
         </form>
 
-        <button id="test-btn">INSERIR ITEM</button>
+        <button id="clear-btn">Limpar</button>
+
+        
     </section>
 
     <section class="data">
@@ -79,6 +80,7 @@
         </div>
         <div class="data_area_controls">
             <button id="load-data-btn">Carregar Dados</button>
+            <button id="test-btn">INSERIR ITEM</button>
             <button id="clear_data_btn">Limpar Dados</button>
         </div>
     </section>
@@ -92,7 +94,7 @@
         <!-- </div> -->
 
         <div class="preview_controls">
-            <button id="regen">Recarregar</button>
+            <button id="reload">Recarregar</button>
             <button id="download">Baixar Arquivo</button>
         </div>
     </section>

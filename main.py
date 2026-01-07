@@ -14,8 +14,14 @@ class Api:
         config.set(microw.Flags.COLUMNS, self.generate_columns(text))
         return microw.parse_data_to_accounts(config, file_lines)
 
-    def build_content(self, accounts: list[dict]):
+    def build_content(self, accounts: list[dict], settings: dict[str, str]):
+        print(accounts)
         config = microw.Config()
+        for setting_name in settings:
+            config.set(microw.Flags.from_str(setting_name), settings[setting_name])
+        
+        if config.get(microw.Flags.SORT_BY) != "":
+            config.set(microw.Flags.SORT, True)
         config.set(microw.Flags.DELIMITER, ",")
 
         return microw.build_content(config, accounts)
@@ -31,6 +37,7 @@ class Api:
         columns_names = ""
         for i in range(columns):
             columns_names += f"col{i} "
+            
         return columns_names.strip()
         
 
