@@ -1,6 +1,6 @@
 1000,Manoel,Vendas,(11) 99999-0000,manoel@vendas.com
-2000,Pedro,Marketing,(21) 88888-1111,pedro@marketing.com
-1101,Central,Serviços,(31) 77777-2222,central@servicos.com
-6000,Marcia,Operacional,(41) 66666-3333,marcia@operacional.com
+2000,Pedro,Marketing,(21) 88888-1111,
+1101,Central,Serviços,(31) 77777-2222,
+6000,Marcia,Operacional,,marcia@operacional.com
 2005,Dandara,Marketing,(51) 55555-4444,dandara@marketing.com
-3001,Ana,Recursos Humanos,(61) 44444-5555,ana@rh.com
+3001,Ana,Recursos Humanos,,

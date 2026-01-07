@@ -255,8 +255,9 @@ def build_content(config: Config, accounts_settings: list[dict[str, str]]) -> st
     for account in accounts_settings:
         new_entry = current_account_template
         for column_name, value in account.items():
-            new_entry = new_entry.replace("$" + column_name, str(value))
-        
+            if (f"${column_name}" in new_entry):
+                new_entry = new_entry.replace("$" + column_name, str(value))
+                
         result += new_entry.strip() + "\n"
 
     result = result.strip()

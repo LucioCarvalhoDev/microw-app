@@ -100,6 +100,7 @@ class Controller {
         const maskedData = this.data.map(accountData => {
             const maskedAccount = {}
             for (let [key, value] of Object.entries(accountData)) {
+                if (accountData[key].length == "") continue;
                 const mask = masks[key]
                 if (mask != undefined) key = mask
                 maskedAccount[key] = value
@@ -163,11 +164,10 @@ class Controller {
 
     async updateContent() {
         const data = this.getMaskedData()
-        console.log("update content", data)
 
         let content = await window.pywebview.api.build_content(data, this.settings);
-        console.log("resultado: ", content)
         this.content = content
+        this.updatePreview()
     }
 
     updatePreview() {

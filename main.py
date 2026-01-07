@@ -15,7 +15,6 @@ class Api:
         return microw.parse_data_to_accounts(config, file_lines)
 
     def build_content(self, accounts: list[dict], settings: dict[str, str]):
-        print(accounts)
         config = microw.Config()
         for setting_name in settings:
             config.set(microw.Flags.from_str(setting_name), settings[setting_name])
